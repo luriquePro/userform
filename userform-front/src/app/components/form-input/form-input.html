@@ -1,0 +1,52 @@
+<div [class]="`relative w-full py-2 ${class}`">
+  <label
+    *ngIf="label"
+    [for]="inputId"
+    class="text-sm absolute left-2 transition-all duration-200 text-gray-700 uppercase"
+    [ngClass]="{
+      'top-0 text-xs': isFocused || value,
+      'top-1/2 -translate-y-1/2': !isFocused && !value
+    }"
+  >
+    {{ label }}
+    <span *ngIf="required" class="text-red-500 ml-1">*</span>
+  </label>
+
+  <input
+    [id]="inputId"
+    [type]="inputType"
+    [value]="value"
+    [disabled]="disabled"
+    [required]="required"
+    [attr.minlength]="minLength || null"
+    [attr.maxlength]="maxLength || null"
+    (input)="onInput($event)"
+    (focus)="isFocused = true"
+    (blur)="onBlur()"
+    class="w-full border-b-2 bg-transparent outline-none transition-colors duration-300 p-2 text-sm"
+    [ngClass]="{
+      'border-red-500 focus:border-red-600': hasError,
+      'border-gray-300 focus:border-emerald-500': !hasError
+    }"
+  />
+
+  <!-- Clear content Icon -->
+  <lucide-icon
+    *ngIf="value && !disabled && isFocused && type !== 'password'"
+    name="X"
+    class="size-4 absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-200 text-gray-400 cursor-pointer hover:text-gray-600"
+    (click)="clearContent()"
+  />
+
+  <!-- Password visibility Icon -->
+  <lucide-icon
+    *ngIf="type === 'password'"
+    [name]="showPassword ? 'EyeOff' : 'Eye'"
+    class="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer"
+    (click)="togglePasswordVisibility()"
+  />
+
+  <p *ngIf="hasError" class="text-sm text-red-600 mt-1 absolute -bottom-5 p-2">
+    {{ getErrorMessage() }}
+  </p>
+</div>
